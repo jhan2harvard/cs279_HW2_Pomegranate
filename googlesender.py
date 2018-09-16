@@ -8,6 +8,9 @@
 # Notes:
 # - The form should be created with "short answer text" questions.
 # - The viewform URL to scrape is the link shared when the form is sent.
+#
+# Credit: David Bau (https://github.com/davidbau)
+# Gist: https://gist.github.com/davidbau/8c168b2720eacbf4e68e9e0a9f437838
 
 import urllib2, re, json, sys
 if len(sys.argv) != 2:

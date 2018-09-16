@@ -12,3 +12,6 @@ A replication of the experiment described in ["Ephemeral Adaptation: The Use of 
 
 This work was done for the class [COMPSCI 279](http://cs279.org/) (Research Topics in Human-Computer Interaction) taught at Harvard.
 
+## Credits
+- `googlesender.py` - [David Bau](https://gist.github.com/davidbau)
+
