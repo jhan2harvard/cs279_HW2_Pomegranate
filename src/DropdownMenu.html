@@ -1,0 +1,148 @@
+<svelte:window on:click="closeSubmenu()" />
+
+<div class="menu">
+	<ul class="tabs">
+		{#each submenus as submenu}
+		<li
+      class="tab"
+      on:click="openSubmenu(submenu, event)"
+      class:selected="selected === submenu"
+    >
+			{submenu.title}
+		</li>
+		{/each}
+	</ul>
+	{#if selected}
+	<ul class="items">
+		{#each selected.items as item}
+		<li class="item" class:fade-in="item.predicted === false">
+			{item.name}
+		</li>
+		{/each}
+	</ul>
+	{/if}
+</div>
+
+<style>
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+  
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .menu {
+    font-weight: bold;
+    --fg-color-active: black;
+    --bg-color-active: rgba(0,0,0,.1);
+    --fg-color-inactive: white;
+    --bg-color-inactive: rgba(0,0,0,.8);
+    --brdr-wid: 0.05em;
+  }
+
+  .menu > * {
+    width: 100%;
+  }
+
+  .tabs {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .tab {
+    flex: 1 0 0;
+    background-color: var(--bg-color-inactive);
+    color: var(--fg-color-inactive);
+    padding: 1em;
+    margin: 0 0.25em;
+    border-style: solid;
+    border-color: black;
+    border-width: var(--brdr-wid) var(--brdr-wid) 0 var(--brdr-wid);
+  }
+
+  .tab:first-child {
+    margin-left: 0;
+  }
+
+  .tab:last-child {
+    margin-right: 0;
+  }
+
+  .items, .tab.selected {
+    color: var(--fg-color-active);
+    background-color: var(--bg-color-active);
+  }
+
+  .items {
+    border-style: solid;
+    border-color: black;
+    border-width: 0 var(--brdr-wid) var(--brdr-wid) var(--brdr-wid);
+    font-size: 90%;
+  }
+
+  .item {
+    padding: 0.75em 1em;
+  }
+
+  .fade-in {
+    animation: fade-in 0.5s;
+  }
+
+  .tab, .item {
+    cursor: pointer;
+  }
+
+  .tab:not(.selected):hover {
+    box-shadow: inset 0 0 100px 100px rgba(255,255,255,.2); /* lighten */
+  }
+
+  .item:hover {
+    box-shadow: inset 0 0 100px 100px rgba(0,0,0,.15); /* darken */
+  }
+
+</style>
+
+<script>
+  export default {
+    data() {
+      const ephemeral = true;
+      const submenus = [];
+      for (let i = 0; i < 3; i += 1) {
+        const submenu = {
+          title: `Menu ${i}`,
+          items: [],
+        };
+        const r = Math.floor(Math.random() * 16);
+        for (let j = 0; j < 16; j += 1) {
+          const item = {
+            name: `Item ${i}-${j}`,
+          };
+          if (ephemeral) item.predicted = ((r + j) % 5) === 0;
+          submenu.items.push(item);
+        }
+        submenus.push(submenu);
+      }
+      return {
+        submenus,
+      };
+    },
+    methods: {
+      closeSubmenu() {
+        this.set({ selected: undefined });
+      },
+      openSubmenu(submenu, event) {
+        this.set({ selected: undefined }); // needed to reset animations
+        this.set({ selected: submenu });
+        if (event) event.stopPropagation();
+      }
+    }
+  };
+</script>

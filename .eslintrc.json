@@ -1,0 +1,14 @@
+{
+    "plugins" : [
+        "html",
+        "@tivac/svelte"
+    ],
+    "extends": [
+        "eslint:recommended",
+        "airbnb-base",
+        "plugin:@tivac/svelte/svelte"
+    ],
+    "env": {
+        "browser": true
+    }
+}
