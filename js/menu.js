@@ -45,7 +45,7 @@ function createMenu(submenus, ephemeral = true) {
 
   menu.appendChild(tabs);
 
-  window.onclick = closeSubmenu;
+  window.addEventListener('click', closeSubmenu);
 
   return menu;
 }
