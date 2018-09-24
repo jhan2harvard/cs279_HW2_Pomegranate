@@ -1,0 +1,21 @@
+* {
+  box-sizing: border-box;
+}
+
+h1 {
+  color: purple;
+}
+
+#task {
+  margin-bottom: 2em;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#experiment {
+  width: 500px; /* fixed size is used for consistent experimental conditions */
+}
