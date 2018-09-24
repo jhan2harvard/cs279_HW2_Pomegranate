@@ -2,12 +2,19 @@
   box-sizing: border-box;
 }
 
-h1 {
-  color: purple;
+body {
+  margin: 0;
+  padding: 0.5em;
+  width: 100vw;
+  display: flex;
+}
+
+body > * {
+  padding: 0 0.5em;
 }
 
 #task {
-  margin-bottom: 2em;
+  margin-bottom: 1em;
 }
 
 main {
@@ -17,5 +24,6 @@ main {
 }
 
 #experiment {
-  width: 500px; /* fixed size is used for consistent experimental conditions */
+  width: 550px; /* fixed size is used for consistent experimental conditions */
+  padding: 0 10px;
 }

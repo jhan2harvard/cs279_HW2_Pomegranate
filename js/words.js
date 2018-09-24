@@ -8,7 +8,7 @@ function getSubmenuWords() {
     const r = Math.floor(Math.random() * 16);
     for (let j = 0; j < 16; j += 1) {
       const item = {
-        name: `Item ${i}-${j}`
+        name: `Item ${i}-${j}`,
       };
       item.predicted = (r + j) % 5 === 0;
       submenu.items.push(item);
