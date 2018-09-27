@@ -27,7 +27,7 @@ function getSequence() {
       seq.push([menus[j], menusequence[k]]);
     }
   }
-  return seq;
+  return shuffleArray(seq);
 }
 
 function sameSequenceNewMenus(sequence) {
