@@ -27,3 +27,18 @@ main {
   width: 550px; /* fixed size is used for consistent experimental conditions */
   padding: 0 10px;
 }
+
+.item{
+  /*display: table;   !* Allow the centering to work *!*/
+  margin: 0 auto;
+  border-top: 2px solid white;
+}
+
+
+
+.fade-in{
+  /*display: table;   !* Allow the centering to work *!*/
+  margin: 0 auto;
+  border-bottom: 2px solid black;
+}
+
