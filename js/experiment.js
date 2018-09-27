@@ -1,4 +1,4 @@
-async function runBlock(sequence, ephemeral, blockNum) {
+async function runBlock(sequence, ephemeral, blockNum, predictions) {
   let trialNum = -1;
   let targetMenuNum;
   let targetItemNum;
@@ -7,7 +7,7 @@ async function runBlock(sequence, ephemeral, blockNum) {
   let startTime;
 
   const nextTrial = () => {
-    trialNum += 8;
+    trialNum += 16;
     if (trialNum >= sequence.length) {
       if (trialNum === sequence.length) {
         window.dispatchEvent(new CustomEvent('blockDone', { detail: { ephemeral, blockNum } }));
@@ -17,6 +17,8 @@ async function runBlock(sequence, ephemeral, blockNum) {
     [targetMenuNum, targetItemNum] = sequence[trialNum];
     targetWord = menu.getWord(targetMenuNum, targetItemNum);
     showTarget(targetMenuNum + 1, targetWord);
+    console.log(predictions);
+    if (predictions) menu.setPredicted(predictions[trialNum]);
     numMistakes = 0;
   };
 
@@ -51,16 +53,21 @@ async function runBlock(sequence, ephemeral, blockNum) {
 }
 
 function runExperiment() {
-  let sequence = getSequence();
-  runBlock(sequence, false, 1);
+  const sequence1 = getSequence();
+  const sequence2 = getSequence();
+  runBlock(sequence1, false, 1);
   window.addEventListener('blockDone', ({ detail: { ephemeral, blockNum } }) => {
-    sequence = sameSequenceNewMenus(sequence);
-    if (blockNum === 1) {
-      runBlock(sequence, ephemeral, 2);
-    } else if (ephemeral === false) {
-      runBlock(sequence, true, 1);
-    } else {
+    if (ephemeral && blockNum === 2) {
       window.dispatchEvent(new CustomEvent('experimentDone'));
+      return;
     }
+    let sequence = blockNum === 1 ? sequence2 : sequence1;
+    const nextEphemeral = ephemeral || blockNum === 2;
+    let predictions;
+    if (nextEphemeral) {
+      sequence = sameSequenceNewMenus(sequence);
+      predictions = getPredictions(sequence);
+    }
+    runBlock(sequence, nextEphemeral, blockNum === 1 ? 2 : 1, predictions);
   });
 }

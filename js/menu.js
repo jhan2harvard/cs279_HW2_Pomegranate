@@ -52,7 +52,7 @@ class Menu {
 
   setNonePredicted() {
     this.lists.forEach((ul) => {
-      ul.children.forEach((li) => {
+      Array.from(ul.children).forEach((li) => {
         li.classList.add('fade-in');
       });
     });
@@ -61,7 +61,8 @@ class Menu {
   setPredicted(predicted) {
     this.setNonePredicted();
     predicted.forEach(([menuNum, itemNum]) => {
-      this.lists[menuNum].children[itemNum].classList.remove('fade-in');
+      console.log('predict', menuNum, itemNum);
+      Array.from(this.lists[menuNum].children)[itemNum].classList.remove('fade-in');
     });
   }
 
