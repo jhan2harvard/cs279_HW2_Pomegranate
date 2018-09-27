@@ -1,4 +1,6 @@
 async function runBlock(sequence, ephemeral, blockNum, predictions) {
+  alert('Beginning new block.');
+
   let trialNum = -1;
   let targetMenuNum;
   let targetItemNum;
@@ -7,7 +9,7 @@ async function runBlock(sequence, ephemeral, blockNum, predictions) {
   let startTime;
 
   const nextTrial = () => {
-    trialNum += 16;
+    trialNum += 1;
     if (trialNum >= sequence.length) {
       if (trialNum === sequence.length) {
         window.dispatchEvent(new CustomEvent('blockDone', { detail: { ephemeral, blockNum } }));
@@ -35,7 +37,8 @@ async function runBlock(sequence, ephemeral, blockNum, predictions) {
       const endTime = (new Date()).getTime();
       window.dispatchEvent(new CustomEvent('trialDone', {
         detail: {
-          condition: ephemeral ? 'ephemeral' : 'control',
+          accuracy: accuracy === HI_ACC ? 'high' : 'low',
+          ephemeral,
           block: blockNum,
           trial: trialNum + 1,
           elapsed: endTime - startTime,
@@ -69,5 +72,9 @@ function runExperiment() {
       predictions = getPredictions(sequence);
     }
     runBlock(sequence, nextEphemeral, blockNum === 1 ? 2 : 1, predictions);
+  });
+
+  window.addEventListener('experimentDone', () => {
+    document.getElementById('experiment').innerHTML = '<h2><a href="https://docs.google.com/forms/d/e/1FAIpQLSccAj7UAGlvyInu1MlxzclsIipW9Tp9BmkGpwppfkgcIWscfA/viewform">Thank you for participating. Please complete this survey.</a>';
   });
 }

@@ -15,3 +15,6 @@ This work was done for the class [COMPSCI 279](http://cs279.org/) (Research Topi
 ## Credits
 - `googlesender.py` - [David Bau](https://gist.github.com/davidbau)
 
+## Note
+The accuracy condition must be set manually. High accuracy is default. Open the console and do `accuracy = LO_ACC` to set to low accuracy.
+

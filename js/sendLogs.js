@@ -3,7 +3,8 @@
 // docs.google.com/forms/d/e/1FAIpQLSeUHh-TERHWukZuiGvjxAigHKAt9E7wACr5X0S4H66QD_YQGw/viewform
 function sendLogs(
     participant,
-    condition,
+    accuracy,
+    ephemeral,
     block,
     trial,
     elapsed,
@@ -14,7 +15,8 @@ function sendLogs(
   var formid = "e/1FAIpQLSeUHh-TERHWukZuiGvjxAigHKAt9E7wACr5X0S4H66QD_YQGw";
   var data = {
     "entry.78011866": participant,
-    "entry.1168172662": condition,
+    "entry.1003383790": accuracy,
+    "entry.1168172662": ephemeral,
     "entry.1412021999": block,
     "entry.1591794659": trial,
     "entry.693516704": elapsed,

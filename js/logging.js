@@ -17,7 +17,8 @@ function enableLogging() {
   const uid = getUniqueId();
   window.addEventListener('trialDone', ({ detail }) => {
     const {
-      condition,
+      accuracy,
+      ephemeral,
       block,
       trial,
       elapsed,
@@ -26,7 +27,6 @@ function enableLogging() {
       menu,
       item,
     } = detail;
-    console.log(uid, condition, block, trial, elapsed, mistakes, word, menu, item);
-    // sendLogs(uid, condition, block, trial, elapsed, mistakes, word, menu, item);
+    sendLogs(uid, accuracy, ephemeral, block, trial, elapsed, mistakes, word, menu, item);
   });
 }

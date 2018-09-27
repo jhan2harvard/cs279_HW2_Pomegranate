@@ -1,7 +1,9 @@
 const LO_ACC = Math.round(0.5 * 63);
 const HI_ACC = Math.round(0.79 * 63);
 
-function getPredictions(sequence, acc = LO_ACC) {
+let accuracy = HI_ACC; // change via console
+
+function getPredictions(sequence, acc = accuracy) {
   const bools = new Array(63).fill(false);
   for (let j = 0; j < acc; j += 1) bools[j] = true;
   shuffleArray(bools);
