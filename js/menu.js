@@ -27,6 +27,7 @@ class Menu {
       tab.onclick = (e) => {
         openSubmenu(i);
         e.stopPropagation();
+        this.elm.dispatchEvent(new CustomEvent('clickMenu', { menuNum: i }));
       };
       tabs.appendChild(tab);
 
@@ -62,5 +63,9 @@ class Menu {
     predicted.forEach(([menuNum, itemNum]) => {
       this.lists[menuNum].children[itemNum].classList.remove('fade-in');
     });
+  }
+
+  getWord(menuNum, itemNum) {
+    return this.lists[menuNum].children[itemNum].innerText;
   }
 }
