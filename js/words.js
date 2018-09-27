@@ -23,15 +23,12 @@ function getSubmenuWords() {
       items: [],
     };
 
-    const r = randint(16); // randomly pick predicted items
-
     for (let g = 0; g < 4; g += 1) {
       const group = getRandomGroup();
       group.forEach((word, w) => {
         const item = {
           name: word,
         };
-        item.predicted = (r + (g * 4) + w) % 5 === 0;
         submenu.items.push(item);
       });
     }

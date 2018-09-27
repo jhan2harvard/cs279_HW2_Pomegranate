@@ -1,51 +1,66 @@
-function createMenu(submenus, ephemeral = true) {
-  const menu = document.createElement('div');
-  menu.classList.add('menu');
+class Menu {
+  constructor(submenus) {
+    this.elm = document.createElement('div');
+    this.elm.classList.add('menu');
 
-  const lists = [];
-  let openList = null;
+    this.lists = [];
+    let openList = null;
 
-  const closeSubmenu = () => {
-    if (openList) menu.removeChild(openList);
-    openList = null;
-  };
-
-  const openSubmenu = (i) => {
-    closeSubmenu();
-    openList = lists[i];
-    menu.appendChild(openList);
-  };
-
-  const tabs = document.createElement('ul');
-  tabs.classList.add('tabs');
-
-  submenus.forEach((submenu, i) => {
-    const tab = document.createElement('li');
-    tab.classList.add('tab');
-    tab.textContent = submenu.title;
-    tab.onclick = (e) => {
-      openSubmenu(i);
-      e.stopPropagation();
+    const closeSubmenu = () => {
+      if (openList) this.elm.removeChild(openList);
+      openList = null;
     };
-    tabs.appendChild(tab);
 
-    const list = document.createElement('ul');
-    list.classList.add('items');
-    submenu.items.forEach((item) => {
-      const listItem = document.createElement('li');
-      listItem.classList.add('item');
-      if (ephemeral && item.predicted === false) {
-        listItem.classList.add('fade-in');
-      }
-      listItem.textContent = item.name;
-      list.appendChild(listItem);
+    const openSubmenu = (i) => {
+      closeSubmenu();
+      openList = this.lists[i];
+      this.elm.appendChild(openList);
+    };
+
+    const tabs = document.createElement('ul');
+    tabs.classList.add('tabs');
+
+    submenus.forEach((submenu, i) => {
+      const tab = document.createElement('li');
+      tab.classList.add('tab');
+      tab.textContent = submenu.title;
+      tab.onclick = (e) => {
+        openSubmenu(i);
+        e.stopPropagation();
+      };
+      tabs.appendChild(tab);
+
+      const list = document.createElement('ul');
+      list.classList.add('items');
+      submenu.items.forEach((item, j) => {
+        const listItem = document.createElement('li');
+        listItem.classList.add('item');
+        listItem.textContent = item.name;
+        listItem.addEventListener('click', () => {
+          this.elm.dispatchEvent(new CustomEvent('clickItem', { menuNum: i, itemNum: j }));
+        });
+        list.appendChild(listItem);
+      });
+      this.lists.push(list);
     });
-    lists.push(list);
-  });
 
-  menu.appendChild(tabs);
+    this.elm.appendChild(tabs);
 
-  window.addEventListener('click', closeSubmenu);
+    window.addEventListener('click', closeSubmenu);
+  }
 
-  return menu;
+  setNonePredicted() {
+    this.lists.forEach((ul) => {
+      ul.children.forEach((li) => {
+        li.classList.add('fade-in');
+      });
+    });
+  }
+
+  setPredicted(predicted) {
+    this.setNonePredicted();
+    predicted.forEach(([menuNum, itemNum]) => {
+      this.lists[menuNum].children[itemNum].classList.remove('fade-in');
+    });
+  }
 }

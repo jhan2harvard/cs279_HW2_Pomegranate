@@ -1,6 +1,6 @@
 const submenus = getSubmenuWords();
-const menu = createMenu(submenus);
+const menu = new Menu(submenus);
 
 window.onload = () => {
-  document.getElementById('experiment').appendChild(menu);
+  document.getElementById('experiment').appendChild(menu.elm);
 };
