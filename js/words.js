@@ -5,11 +5,6 @@ for (let i = 0; i < experimentWords.length - 3; i += 4) {
   wordGroups.push(experimentWords.slice(i, i + 4));
 }
 
-function randint(upperOpenBound) {
-  return Math.floor(Math.random() * upperOpenBound);
-}
-
-
 function getSubmenuWords() {
   const submenus = [];
 
