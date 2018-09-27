@@ -14,18 +14,19 @@ function getSubmenuWords() {
     do {
       groupIdx = randint(wordGroups.length);
     } while (usedGroups.has(groupIdx));
+    usedGroups.add(groupIdx);
     return wordGroups[groupIdx];
   };
 
   for (let m = 0; m < 3; m += 1) {
     const submenu = {
-      title: `Menu ${m}`,
+      title: `Menu ${m + 1}`,
       items: [],
     };
 
     for (let g = 0; g < 4; g += 1) {
       const group = getRandomGroup();
-      group.forEach((word, w) => {
+      group.forEach((word) => {
         const item = {
           name: word,
         };
