@@ -15,7 +15,18 @@ function getUniqueId() {
 
 function enableLogging() {
   const uid = getUniqueId();
-  window.addEventListener('trialComplete', (...args) => {
-    sendLogs(uid, ...args);
+  window.addEventListener('trialDone', ({ detail }) => {
+    const {
+      condition,
+      block,
+      trial,
+      elapsed,
+      mistakes,
+      word,
+      menu,
+      item,
+    } = detail;
+    console.log(uid, condition, block, trial, elapsed, mistakes, word, menu, item);
+    // sendLogs(uid, condition, block, trial, elapsed, mistakes, word, menu, item);
   });
 }

@@ -27,7 +27,7 @@ class Menu {
       tab.onclick = (e) => {
         openSubmenu(i);
         e.stopPropagation();
-        this.elm.dispatchEvent(new CustomEvent('clickMenu', { menuNum: i }));
+        window.dispatchEvent(new CustomEvent('clickMenu', { detail: { menuNum: i } }));
       };
       tabs.appendChild(tab);
 
@@ -38,7 +38,7 @@ class Menu {
         listItem.classList.add('item');
         listItem.textContent = item.name;
         listItem.addEventListener('click', () => {
-          this.elm.dispatchEvent(new CustomEvent('clickItem', { menuNum: i, itemNum: j }));
+          window.dispatchEvent(new CustomEvent('clickItem', { detail: { menuNum: i, itemNum: j } }));
         });
         list.appendChild(listItem);
       });
