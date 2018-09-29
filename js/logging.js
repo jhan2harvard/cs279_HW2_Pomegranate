@@ -15,8 +15,8 @@ function getUniqueId() {
 
 
 // toggle
-const logToConsole = true;
-const logToRemote = false;
+const logToConsole = false;
+const logToRemote = true;
 
 // set up logging on each completed trial
 function enableLogging() {
