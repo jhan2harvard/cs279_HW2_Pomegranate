@@ -1,0 +1,14 @@
+#task {
+  margin-bottom: 1em;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#experiment {
+  width: 550px;
+  padding: 0 10px; /* fixed size is used for consistent experimental conditions */
+}

@@ -13,6 +13,12 @@ function getUniqueId() {
   return localStorage.uid;
 }
 
+
+// toggle
+const logToConsole = true;
+const logToRemote = false;
+
+// set up logging on each completed trial
 function enableLogging() {
   const uid = getUniqueId();
   window.addEventListener('trialDone', ({ detail }) => {
@@ -27,6 +33,7 @@ function enableLogging() {
       menu,
       item,
     } = detail;
-    sendLogs(uid, accuracy, ephemeral, block, trial, elapsed, mistakes, word, menu, item);
+    if (logToConsole) console.log(uid, accuracy, ephemeral, block, trial, elapsed, mistakes, word, menu, item);
+    if (logToRemote) sendLogs(uid, accuracy, ephemeral, block, trial, elapsed, mistakes, word, menu, item);
   });
 }

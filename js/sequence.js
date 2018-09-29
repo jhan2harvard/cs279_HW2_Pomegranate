@@ -1,3 +1,8 @@
+/**
+ * Generate a length-63 selection sequence.
+ * @return {[number, number][63]} sequence
+ * Items of sequence are [menuNum, itemNum]
+ */
 function getSequence() {
   const seq = [];
   let menus = [0, 1, 2];
@@ -17,9 +22,15 @@ function getSequence() {
       seq.push([menus[j], menusequence[k]]);
     }
   }
+  do {
+    shuffleArray(seq);
+  } while (pairs(seq).reduce((b, [i1, i2]) => b || (i1[0] === i2[0] && i1[1] === i2[1]), false))
   return shuffleArray(seq);
 }
 
+/**
+ * Give every item in a sequence a different menu num
+ */
 function sameSequenceNewMenus(sequence) {
   return sequence.map(([menuNum, itemNum]) => {
     let newMenuNum;
@@ -28,4 +39,13 @@ function sameSequenceNewMenus(sequence) {
     } while (newMenuNum === menuNum);
     return [newMenuNum, itemNum];
   });
+}
+
+/**
+ * Populate sequences in localStorage
+ * call generateSequences(true) in the console to force re-generation
+ */
+function generateSequences(reset = false) {
+  const sequences = readLocalStorage('sequences', [getSequence(), getSequence()], reset);
+  return sequences.map(sequence => sequence.map(item => item.map(s => parseInt(s, 10))));
 }

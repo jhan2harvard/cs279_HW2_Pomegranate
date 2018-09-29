@@ -1,4 +1,11 @@
+// this file (with menu.css) implements the ephemeral menu
+
 class Menu {
+  /**
+   * Insert the menu in the DOM
+   * Sends events when tabs and items are clicked
+   * @param {Submenu[]} submenus
+   */
   constructor(submenus) {
     this.elm = document.createElement('div');
     this.elm.classList.add('menu');
@@ -36,7 +43,7 @@ class Menu {
       submenu.items.forEach((item, j) => {
         const listItem = document.createElement('li');
         listItem.classList.add('item');
-        listItem.textContent = item.name;
+        listItem.textContent = item;
         listItem.addEventListener('click', () => {
           window.dispatchEvent(new CustomEvent('clickItem', { detail: { menuNum: i, itemNum: j } }));
         });
@@ -58,10 +65,17 @@ class Menu {
     });
   }
 
+  setAllPredicted() {
+    this.lists.forEach((ul) => {
+      Array.from(ul.children).forEach((li) => {
+        li.classList.remove('fade-in');
+      });
+    });
+  }
+
   setPredicted(predicted) {
     this.setNonePredicted();
     predicted.forEach(([menuNum, itemNum]) => {
-      console.log('predict', menuNum, itemNum);
       Array.from(this.lists[menuNum].children)[itemNum].classList.remove('fade-in');
     });
   }

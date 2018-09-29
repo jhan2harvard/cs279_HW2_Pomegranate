@@ -1,7 +1,19 @@
-async function runBlock(sequence, ephemeral, blockNum, predictions) {
-  alert('Beginning new block.');
+// this code creates and runs the actual experiment
 
-  let trialNum = -1;
+const queryParams = new URLSearchParams(window.location.search);
+
+let menu;
+
+function alertAndGoHome(message) {
+  alert(`${message}\nGoing back to the homepage.`);
+  window.location.href = 'index.html';
+}
+
+function blockStart(sequence, ephemeral, blockNum) {
+  const predictions = ephemeral ? getPredictions(sequence) : null;
+  if (!ephemeral) menu.setAllPredicted(); // no fade-in
+
+  let trialNum = parseInt(queryParams.get('trial'), 10) || -1;
   let targetMenuNum;
   let targetItemNum;
   let targetWord;
@@ -10,16 +22,15 @@ async function runBlock(sequence, ephemeral, blockNum, predictions) {
 
   const nextTrial = () => {
     trialNum += 1;
-    if (trialNum >= sequence.length) {
-      if (trialNum === sequence.length) {
-        window.dispatchEvent(new CustomEvent('blockDone', { detail: { ephemeral, blockNum } }));
-      }
-      return;
-    }
+    queryParams.set('trial', trialNum);
+    history.pushState(null, '', window.location.pathname + '?' + queryParams.toString());
+
+    if (trialNum === sequence.length) window.dispatchEvent(new CustomEvent('blockDone'));
+    if (trialNum >= sequence.length) return;
+
     [targetMenuNum, targetItemNum] = sequence[trialNum];
     targetWord = menu.getWord(targetMenuNum, targetItemNum);
     showTarget(targetMenuNum + 1, targetWord);
-    console.log(predictions);
     if (predictions) menu.setPredicted(predictions[trialNum]);
     numMistakes = 0;
   };
@@ -37,10 +48,10 @@ async function runBlock(sequence, ephemeral, blockNum, predictions) {
       const endTime = (new Date()).getTime();
       window.dispatchEvent(new CustomEvent('trialDone', {
         detail: {
-          accuracy: accuracy === HI_ACC ? 'high' : 'low',
+          accuracy: accuracy == HI_ACC ? 'high' : 'low',
           ephemeral,
           block: blockNum,
-          trial: trialNum + 1,
+          trial: trialNum,
           elapsed: endTime - startTime,
           mistakes: numMistakes,
           word: targetWord,
@@ -55,26 +66,32 @@ async function runBlock(sequence, ephemeral, blockNum, predictions) {
   });
 }
 
-function runExperiment() {
-  const sequence1 = getSequence();
-  const sequence2 = getSequence();
-  runBlock(sequence1, false, 1);
-  window.addEventListener('blockDone', ({ detail: { ephemeral, blockNum } }) => {
-    if (ephemeral && blockNum === 2) {
-      window.dispatchEvent(new CustomEvent('experimentDone'));
-      return;
-    }
-    let sequence = blockNum === 1 ? sequence2 : sequence1;
-    const nextEphemeral = ephemeral || blockNum === 2;
-    let predictions;
-    if (nextEphemeral) {
-      sequence = sameSequenceNewMenus(sequence);
-      predictions = getPredictions(sequence);
-    }
-    runBlock(sequence, nextEphemeral, blockNum === 1 ? 2 : 1, predictions);
-  });
+function loadExperiment() {
+  const sequences = generateSequences();
+  const blockNums = getBlockNums();
+  const ephemeral = queryParams.get('ephemeral') == 'true';
 
-  window.addEventListener('experimentDone', () => {
-    document.getElementById('experiment').innerHTML = '<h2><a href="https://docs.google.com/forms/d/e/1FAIpQLSccAj7UAGlvyInu1MlxzclsIipW9Tp9BmkGpwppfkgcIWscfA/viewform">Thank you for participating. Please complete this survey.</a>';
+  const blockNum = blockNums[ephemeral ? 'ephemeral' : 'control'];
+  const otherBlockNum = blockNums[ephemeral ? 'control' : 'ephemeral'];
+
+  menu = new Menu(getSubmenuWords());
+  document.getElementById('experiment').appendChild(menu.elm);
+
+  enableLogging();
+
+  if (blockNum >= sequences.length) {
+    alertAndGoHome('You have completed this condition the maximum number of times.');
+  } else if (otherBlockNum === 1) {
+    alertAndGoHome('Please do another set of the other condition first.');
+  } else {
+    const sequence = sequences[blockNum];
+    blockStart(sequence, ephemeral, blockNum);
+  }
+
+  window.addEventListener('blockDone', () => {
+    incrementBlockNum(ephemeral);
+    alertAndGoHome('You have finished the block.');
   });
-}
+};
+
+window.addEventListener('load', loadExperiment);
