@@ -30,7 +30,9 @@ function blockStart(sequence, ephemeral, blockNum) {
 
     [targetMenuNum, targetItemNum] = sequence[trialNum];
     targetWord = menu.getWord(targetMenuNum, targetItemNum);
+    showBlockProgress(blockNum + 1, 2);
     showTarget(targetMenuNum + 1, targetWord);
+    showTrialProgress(trialNum, 63);
     if (predictions) menu.setPredicted(predictions[trialNum]);
     numMistakes = 0;
   };
