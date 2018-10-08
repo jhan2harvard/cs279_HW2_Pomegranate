@@ -117,7 +117,7 @@ overall_sd = np.std(all_times)
 # analyze by participant x condition
 
 # data for output table
-summary_headers = ['participant', 'accuracy', 'ephemeral', 'mean', 'meadian', 'SD']
+summary_headers = ['participant', 'accuracy', 'ephemeral', 'mean', 'meadian', 'SD', 'errRate']
 summary_rows = []
 
 def analyze_participant_data(paricipant_data):
@@ -131,7 +131,8 @@ def analyze_participant_data(paricipant_data):
         avg = np.mean(times_no_outliers)
         med = np.median(times_no_outliers)
         sd = np.std(times_no_outliers)
-        summary_rows.append([participant, accuracy, ephemeral, str(avg), str(med), str(sd)])
+        err_rate = len([m for m in data_condition.get_col('mistakes') if int(m) > 0]) / len(data_condition.rows)
+        summary_rows.append([participant, accuracy, ephemeral, str(avg), str(med), str(sd), str(err_rate)])
 
 for participant, data in data_by_participant.items():
     analyze_participant_data(data)
